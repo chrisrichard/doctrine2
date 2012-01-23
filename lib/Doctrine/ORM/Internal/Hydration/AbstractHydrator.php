@@ -293,9 +293,13 @@ abstract class AbstractHydrator
                         break;
                     }
 
-                    $rowData['data'][$dqlAlias][$fieldName] = $type
+                    $value = $type
                         ? $type->convertToPHPValue($value, $this->_platform)
                         : $value;
+                    if ($value instanceof \DateTime) {
+                        $value->timestamp = $value->getTimestamp();
+                    }
+                    $rowData['data'][$dqlAlias][$fieldName] = $value;
 
                     if ($cacheKeyInfo['isIdentifier'] && $value !== null) {
                         $id[$dqlAlias] .= '|' . $value;
