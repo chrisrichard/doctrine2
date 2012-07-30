@@ -129,11 +129,7 @@ class Paginator implements \Countable, \IteratorAggregate
         return $this->count;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
-    {
+    public function getResult() {
         $offset = $this->query->getFirstResult();
         $length = $this->query->getMaxResults();
 
@@ -172,7 +168,15 @@ class Paginator implements \Countable, \IteratorAggregate
             ;
         }
 
-        return new \ArrayIterator($result);
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->getResult());
     }
 
     /**
