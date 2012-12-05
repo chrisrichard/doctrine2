@@ -3278,7 +3278,7 @@ class Parser
     }
 
     /**
-     * ComparisonOperator ::= "=" | "<" | "<=" | "<>" | ">" | ">=" | "!="
+     * ComparisonOperator ::= "=" | "<" | "<=" | "<>" | ">" | ">=" | "!=" | "?" | "@>"
      *
      * @return string
      */
@@ -3320,9 +3320,20 @@ class Parser
                 $this->match(Lexer::T_EQUALS);
 
                 return '<>';
+                
+            case '?':
+            	$this->match(Lexer::T_QUESTION);
+            	
+            	return '?';
+            	
+            case '@':
+            	$this->match(Lexer::T_AT);
+            	$this->match(Lexer::T_GREATER_THAN);
+            	
+            	return '@>';
 
             default:
-                $this->syntaxError('=, <, <=, <>, >, >=, !=');
+                $this->syntaxError('=, <, <=, <>, >, >=, !=, ?, @>');
         }
     }
 
