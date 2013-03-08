@@ -509,6 +509,11 @@ class Expr
         return new Expr\Comparison($x, 'LIKE', $y);
     }
 
+    public function ilike($x, $y)
+    {
+        return new Expr\Comparison($x, 'ILIKE', $y);
+    }
+
     /**
      * Creates a NOT LIKE() comparison expression with the given arguments.
      *

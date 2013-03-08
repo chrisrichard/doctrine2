@@ -2151,8 +2151,7 @@ class SqlWalker implements TreeWalker
             ? $this->walkResultVariable($stringExpr)
             : $stringExpr->dispatch($this);
 
-        $sql = $leftExpr . ($likeExpr->not ? ' NOT' : '') . ' LIKE ';
-
+        $sql = $leftExpr . ($likeExpr->not ? ' NOT' : '') . ($likeExpr->ilike ? ' ILIKE ' : ' LIKE ');
         if ($likeExpr->stringPattern instanceof AST\InputParameter) {
             $sql .= $this->walkInputParameter($likeExpr->stringPattern);
         } elseif ($likeExpr->stringPattern instanceof AST\Functions\FunctionNode) {

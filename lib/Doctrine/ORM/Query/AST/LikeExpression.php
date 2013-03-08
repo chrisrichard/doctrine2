@@ -35,6 +35,11 @@ class LikeExpression extends Node
     public $not;
 
     /**
+     * @var bool
+     */
+    public $ilike;
+
+    /**
      * @var Node
      */
     public $stringExpression;
