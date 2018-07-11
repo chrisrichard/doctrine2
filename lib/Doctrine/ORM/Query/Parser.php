@@ -3303,6 +3303,8 @@ class Parser
     /**
      * ComparisonOperator ::= "=" | "<" | "<=" | "<>" | ">" | ">=" | "!="
      *
+     * RATEHUB_MODIFICATION: Adding ? and @> operators for PGSQL's HSTORE queries. | "?" | "@"
+     *
      * @return string
      */
     public function ComparisonOperator()
@@ -3344,8 +3346,20 @@ class Parser
 
                 return '<>';
 
+            case '?':
+                $this->match(Lexer::T_QUESTION);
+
+                return '?';
+
+            case '@':
+                $this->match(Lexer::T_AT);
+                $this->match(Lexer::T_GREATER_THAN);
+
+                return '@>';
+
             default:
-                $this->syntaxError('=, <, <=, <>, >, >=, !=');
+                // RATEHUB_MODIFICATION: Adding ? and @> operators for PGSQL's HSTORE queries.
+                $this->syntaxError('=, <, <=, <>, >, >=, !=, ?, @');
         }
     }
 
