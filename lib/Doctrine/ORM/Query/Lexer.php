@@ -118,6 +118,9 @@ class Lexer extends \Doctrine\Common\Lexer
     const T_WHERE                = 255;
     const T_WITH                 = 256;
 
+    // RATEHUB_MODIFICATION: ILIKE is specifically for postgres.
+    const T_ILIKE                = 9001; // It's over 9000!
+
     /**
      * Creates a new query scanner object.
      *

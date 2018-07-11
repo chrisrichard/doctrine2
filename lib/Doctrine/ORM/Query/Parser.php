@@ -2480,7 +2480,7 @@ class Parser
         $peek = $this->peekBeyondClosingParenthesis();
 
         if (in_array($peek['value'], ["=",  "<", "<=", "<>", ">", ">=", "!="]) ||
-            in_array($peek['type'], [Lexer::T_NOT, Lexer::T_BETWEEN, Lexer::T_LIKE, Lexer::T_IN, Lexer::T_IS, Lexer::T_EXISTS]) ||
+            in_array($peek['type'], [Lexer::T_NOT, Lexer::T_BETWEEN, Lexer::T_LIKE, Lexer::T_ILIKE, Lexer::T_IN, Lexer::T_IS, Lexer::T_EXISTS]) ||
             $this->isMathOperator($peek)) {
             $condPrimary->simpleConditionalExpression = $this->SimpleConditionalExpression();
 
@@ -2565,6 +2565,10 @@ class Parser
         }
 
         if ($token['type'] === Lexer::T_LIKE) {
+            return $this->LikeExpression();
+        }
+
+        if ($token['type'] === Lexer::T_ILIKE) {
             return $this->LikeExpression();
         }
 
@@ -3171,13 +3175,19 @@ class Parser
     {
         $stringExpr = $this->StringExpression();
         $not = false;
+        $ilike = false;
 
         if ($this->lexer->isNextToken(Lexer::T_NOT)) {
             $this->match(Lexer::T_NOT);
             $not = true;
         }
 
-        $this->match(Lexer::T_LIKE);
+        if ($this->lexer->isNextToken(Lexer::T_ILIKE)) {
+            $this->match(Lexer::T_ILIKE);
+            $ilike = true;
+        } else {
+            $this->match(Lexer::T_LIKE);
+        }
 
         if ($this->lexer->isNextToken(Lexer::T_INPUT_PARAMETER)) {
             $this->match(Lexer::T_INPUT_PARAMETER);
@@ -3197,6 +3207,7 @@ class Parser
 
         $likeExpr = new AST\LikeExpression($stringExpr, $stringPattern, $escapeChar);
         $likeExpr->not = $not;
+        $likeExpr->ilike = $ilike;
 
         return $likeExpr;
     }
