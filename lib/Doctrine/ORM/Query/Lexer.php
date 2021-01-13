@@ -52,6 +52,10 @@ class Lexer extends AbstractLexer
     const T_OPEN_CURLY_BRACE     = 18;
     const T_CLOSE_CURLY_BRACE    = 19;
 
+    // RATEHUB_MODIFICATION: Adding ? and @> operators for PGSQL's HSTORE queries.
+    const T_QUESTION             = 20;
+    const T_AT                   = 21;
+
     // All tokens that are identifiers or keywords that could be considered as identifiers should be >= 100
     const T_ALIASED_NAME         = 100;
     const T_FULLY_QUALIFIED_NAME = 101;
@@ -115,6 +119,9 @@ class Lexer extends AbstractLexer
     const T_WHEN                 = 254;
     const T_WHERE                = 255;
     const T_WITH                 = 256;
+
+    // RATEHUB_MODIFICATION: ILIKE is specifically for postgres.
+    const T_ILIKE                = 9001; // It's over 9000!
 
     /**
      * Creates a new query scanner object.
@@ -211,6 +218,10 @@ class Lexer extends AbstractLexer
             case ($value === '!'): return self::T_NEGATE;
             case ($value === '{'): return self::T_OPEN_CURLY_BRACE;
             case ($value === '}'): return self::T_CLOSE_CURLY_BRACE;
+
+            // RATEHUB_MODIFICATION: Adding ? and @> operators for PGSQL's HSTORE queries.
+            case ($value === '?'): return self::T_QUESTION;
+            case ($value === '@'): return self::T_AT;
 
             // Default
             default:

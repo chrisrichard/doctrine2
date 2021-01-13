@@ -35,6 +35,12 @@ class LikeExpression extends Node
     public $not;
 
     /**
+     * RATEHUB_MODIFICATION: ILIKE is specifically for postgres.
+     * @var bool
+     */
+    public $ilike;
+
+    /**
      * @var Node
      */
     public $stringExpression;
