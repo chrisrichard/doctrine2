@@ -524,6 +524,20 @@ class Expr
     }
 
     /**
+     * RATEHUB_MODIFICATION: ILIKE is specifically for postgres.
+     * Creates a ILIKE() comparison expression with the given arguments.
+     *
+     * @param string $x Field in string format to be inspected by LIKE() comparison.
+     * @param mixed  $y Argument to be used in LIKE() comparison.
+     *
+     * @return Expr\Comparison
+     */
+    public function ilike($x, $y)
+    {
+        return new Expr\Comparison($x, 'ILIKE', $y);
+    }
+
+    /**
      * Creates a NOT LIKE() comparison expression with the given arguments.
      *
      * @param string $x Field in string format to be inspected by LIKE() comparison.
