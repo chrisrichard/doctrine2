@@ -372,9 +372,18 @@ abstract class AbstractHydrator
                         break;
                     }
 
-                    $rowData['data'][$dqlAlias][$fieldName] = $type
+                    // RATEHUB_MODIFICATION: Updated to provide a timestamp property for DateTime objects.
+                    // TODO RATEHUB (lrobert): This is for easier front-end date parsing (legacy modification).
+                    // TODO RATEHUB (lrobert): We should probably be doing this using a json formatter instead of bringing it at the database layer.
+                    $value = $type
                         ? $type->convertToPHPValue($value, $this->_platform)
                         : $value;
+
+                    if ($value instanceof \DateTime) {
+                        $value->timestamp = $value->getTimestamp();
+                    }
+
+                    $rowData['data'][$dqlAlias][$fieldName] = $value;
 
                     if ($cacheKeyInfo['isIdentifier'] && $value !== null) {
                         $id[$dqlAlias] .= '|' . $value;
